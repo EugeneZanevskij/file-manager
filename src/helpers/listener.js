@@ -1,27 +1,14 @@
 import { resolve } from 'path';
 import { getCurrentDirectory } from './console.js';
-import { open, rename, unlink } from 'fs/promises';
+import { rename, unlink } from 'fs/promises';
 import { createReadStream, createWriteStream } from 'fs';
 import { pipeline } from 'stream/promises';
 
 import { up, cd } from '../operations/navigation.js';
 import { ls } from '../operations/ls.js';
 import { cat } from '../operations/cat.js';
+import { add } from '../operations/add.js';
 
-const add = async (path) => {
-  try {
-    if (path) {
-      const currentDir = process.cwd();
-      let file = await open(resolve(currentDir, path), 'w');
-      file.close();
-      getCurrentDirectory();
-    } else {
-      console.log('Invalid input');
-    }
-  } catch {
-    console.log('Operation failed');
-  }
-}
 
 const rn = async (path, newPath) => {
   try {
