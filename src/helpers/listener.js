@@ -2,7 +2,9 @@ import {resolve, join} from 'path';
 import { chdir } from 'process';
 import { getCurrentDirectory } from './console.js';
 import { readdir, stat } from 'fs/promises';
-import { isDirectory } from './isDirectory.js';
+import { createReadStream } from 'fs';
+import { pipeline } from 'stream/promises';
+import { output } from './output.js';
 
 const up = (path) => {
   try {
@@ -65,6 +67,20 @@ const ls = async (path) => {
   }
 }
 
+const cat = async (path) => {
+  try {
+    if (path) {
+      const readStream = createReadStream(resolve(path), {encoding: 'utf-8'});
+      await pipeline(readStream, output());
+      getCurrentDirectory();
+    } else {
+      console.log('Invalid input');
+    }
+  } catch {
+    console.log('Operation failed');
+  }
+}
+
 export const listener = async (data) => {
   const [command, path] = data.toString().trim().split(' ');
   switch (command) {
@@ -73,6 +89,8 @@ export const listener = async (data) => {
     case 'cd': cd(path);
       break;
     case 'ls': await ls(path);
+      break;
+    case 'cat': await cat(path);
       break;
     default: console.log(`Unknown command: ${command}`);
   }
