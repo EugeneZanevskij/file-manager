@@ -1,6 +1,8 @@
-import {resolve} from 'path';
+import {resolve, join} from 'path';
 import { chdir } from 'process';
 import { getCurrentDirectory } from './console.js';
+import { readdir, stat } from 'fs/promises';
+import { isDirectory } from './isDirectory.js';
 
 const up = (path) => {
   try {
@@ -33,12 +35,44 @@ const cd = (path) => {
   }
 }
 
-export const listener = (data) => {
+const ls = async (path) => {
+  try {
+    if (path) {
+      console.log('Invalid input');
+    } else {
+      const currentDir = process.cwd();
+      const content = await readdir(currentDir);
+
+      const directories = [];
+      const files = [];
+
+      for (const item of content) {
+        const itemPath = join(currentDir, item);
+        const stats = await stat(itemPath);
+        if (stats.isDirectory()) {
+          directories.push({name: item, type: "directory"});
+        } else {
+          files.push({ name: item, type: "file" });
+        }
+      }
+
+      const contentArray = [ ...directories, ...files];
+      console.table(contentArray);
+      getCurrentDirectory();
+    }
+  } catch {
+    console.log('Operation failed');
+  }
+}
+
+export const listener = async (data) => {
   const [command, path] = data.toString().trim().split(' ');
   switch (command) {
     case 'up': up(path);
       break;
     case 'cd': cd(path);
+      break;
+    case 'ls': await ls(path);
       break;
     default: console.log(`Unknown command: ${command}`);
   }
