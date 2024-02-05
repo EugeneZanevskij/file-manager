@@ -1,7 +1,3 @@
-import { resolve } from 'path';
-import { getCurrentDirectory } from './console.js';
-import { unlink } from 'fs/promises';
-
 import { up, cd } from '../operations/navigation.js';
 import { ls } from '../operations/ls.js';
 import { cat } from '../operations/cat.js';
@@ -9,20 +5,7 @@ import { add } from '../operations/add.js';
 import { rn } from '../operations/rn.js';
 import { cp } from '../operations/cp.js';
 import { mv } from '../operations/mv.js';
-
-const rm = async (path) => {
-  try {
-    if (path) {
-      const currentDir = process.cwd();
-      await unlink(resolve(currentDir, path));
-      getCurrentDirectory();
-    } else {
-      console.log('Invalid input');
-    }
-  } catch {
-    console.log('Operation failed');
-  }
-}
+import { rm } from '../operations/rm.js';
 
 export const listener = async (data) => {
   const [command, path, newPath] = data.toString().trim().split(' ');
