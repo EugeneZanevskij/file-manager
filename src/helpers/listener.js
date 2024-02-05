@@ -143,6 +143,20 @@ const mv = async (path, newPath) => {
   }
 }
 
+const rm = async (path) => {
+  try {
+    if (path) {
+      const currentDir = process.cwd();
+      await unlink(resolve(currentDir, path));
+      getCurrentDirectory();
+    } else {
+      console.log('Invalid input');
+    }
+  } catch {
+    console.log('Operation failed');
+  }
+}
+
 export const listener = async (data) => {
   const [command, path, newPath] = data.toString().trim().split(' ');
   switch (command) {
@@ -161,6 +175,8 @@ export const listener = async (data) => {
     case 'cp': await cp(path, newPath);
       break;
     case 'mv': await mv(path, newPath);
+      break;
+    case 'rm': await rm(path);
       break;
     default: console.log(`Unknown command: ${command}`);
   }
