@@ -1,7 +1,7 @@
 import {resolve, join} from 'path';
 import { chdir } from 'process';
 import { getCurrentDirectory } from './console.js';
-import { readdir, stat } from 'fs/promises';
+import { open, readdir, stat } from 'fs/promises';
 import { createReadStream } from 'fs';
 import { pipeline } from 'stream/promises';
 import { output } from './output.js';
@@ -81,6 +81,21 @@ const cat = async (path) => {
   }
 }
 
+const add = async (path) => {
+  try {
+    if (path) {
+      const currentDir = process.cwd();
+      let file = await open(resolve(currentDir, path), 'w');
+      file.close();
+      getCurrentDirectory();
+    } else {
+      console.log('Invalid input');
+    }
+  } catch {
+    console.log('Operation failed');
+  }
+}
+
 export const listener = async (data) => {
   const [command, path] = data.toString().trim().split(' ');
   switch (command) {
@@ -91,6 +106,8 @@ export const listener = async (data) => {
     case 'ls': await ls(path);
       break;
     case 'cat': await cat(path);
+      break;
+    case 'add': await add(path);
       break;
     default: console.log(`Unknown command: ${command}`);
   }
