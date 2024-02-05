@@ -12,6 +12,7 @@ export const os = (argument) => {
         const cpusInfo = cpus().map(({ model, speed }) => {
           return { model, clockRate: `${(speed / 1000).toFixed(2)} GHz` };
         });
+        console.log(`Cores: ${cpus().length}`);
         console.table(cpusInfo);
         getCurrentDirectory();
         break;
