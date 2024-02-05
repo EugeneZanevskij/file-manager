@@ -1,6 +1,7 @@
 import  { homedir } from 'os';
 import { chdir } from 'process';
-import { getCurrentDirectory, startOfApp, endOfApp } from './helpers/console';
+import { getCurrentDirectory, startOfApp, endOfApp } from './helpers/console.js';
+import { listener } from './helpers/listener.js';
 
 const changeHomeDirectory = () => {
   chdir(homedir());
@@ -10,10 +11,7 @@ const changeHomeDirectory = () => {
 startOfApp();
 changeHomeDirectory();
 
-process.stdin.on('data', (data) => {
-  process.stdout.write(data);
-  getCurrentDirectory();
-});
+process.stdin.on('data', listener);
 
 process.on('SIGINT', () => {
   endOfApp();
