@@ -6,6 +6,7 @@ import { rn } from '../operations/rn.js';
 import { cp } from '../operations/cp.js';
 import { mv } from '../operations/mv.js';
 import { rm } from '../operations/rm.js';
+import { endOfApp } from './console.js';
 
 export const listener = async (data) => {
   const [command, path, newPath] = data.toString().trim().split(' ');
@@ -27,6 +28,8 @@ export const listener = async (data) => {
     case 'mv': await mv(path, newPath);
       break;
     case 'rm': await rm(path);
+      break;
+    case '.exit': endOfApp();
       break;
     default: console.log(`Unknown command: ${command}`);
   }
