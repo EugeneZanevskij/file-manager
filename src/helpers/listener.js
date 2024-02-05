@@ -1,41 +1,12 @@
 import { resolve, join } from 'path';
 import { getCurrentDirectory } from './console.js';
-import { open, readdir, rename, stat, unlink } from 'fs/promises';
+import { open, rename, unlink } from 'fs/promises';
 import { createReadStream, createWriteStream } from 'fs';
 import { pipeline } from 'stream/promises';
 import { output } from './output.js';
 
 import { up, cd } from '../operations/navigation.js';
-
-const ls = async (path) => {
-  try {
-    if (path) {
-      console.log('Invalid input');
-    } else {
-      const currentDir = process.cwd();
-      const content = await readdir(currentDir);
-
-      const directories = [];
-      const files = [];
-
-      for (const item of content) {
-        const itemPath = join(currentDir, item);
-        const stats = await stat(itemPath);
-        if (stats.isDirectory()) {
-          directories.push({name: item, type: "directory"});
-        } else {
-          files.push({ name: item, type: "file" });
-        }
-      }
-
-      const contentArray = [ ...directories, ...files];
-      console.table(contentArray);
-      getCurrentDirectory();
-    }
-  } catch {
-    console.log('Operation failed');
-  }
-}
+import { ls } from '../operations/ls.js';
 
 const cat = async (path) => {
   try {
