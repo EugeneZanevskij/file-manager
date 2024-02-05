@@ -9,22 +9,7 @@ import { ls } from '../operations/ls.js';
 import { cat } from '../operations/cat.js';
 import { add } from '../operations/add.js';
 import { rn } from '../operations/rn.js';
-
-const cp = async (path, newPath) => {
-  try {
-    if (path && newPath) {
-      const currentDir = process.cwd();
-      const readStream = createReadStream(resolve(currentDir, path), {encoding: 'utf-8'});
-      const writeStream = createWriteStream(resolve(currentDir, newPath), {encoding: 'utf-8'});
-      await pipeline(readStream, writeStream);
-      getCurrentDirectory();
-    } else {
-      console.log('Invalid input');
-    }
-  } catch {
-    console.log('Operation failed');
-  }
-}
+import { cp } from '../operations/cp.js';
 
 const mv = async (path, newPath) => {
   try {
