@@ -1,5 +1,5 @@
 import {resolve} from 'path';
-import { homedir } from 'os';
+import { chdir } from 'process';
 import { getCurrentDirectory } from './console.js';
 
 const up = (path) => {
@@ -9,7 +9,6 @@ const up = (path) => {
     } else {
       const currentDir = process.cwd();
       const parentDir = resolve(currentDir, '..');
-      console.log(currentDir, parentDir);
       if (parentDir !== currentDir) {
         process.chdir(parentDir);
       }
@@ -20,10 +19,26 @@ const up = (path) => {
   }
 };
 
+const cd = (path) => {
+  try {
+    if (path) {
+      const currentDir = process.cwd();
+      chdir(resolve(currentDir, path));
+      getCurrentDirectory();
+    } else {
+      console.log('Invalid input');
+    }
+  } catch {
+    console.log('Operation failed');
+  }
+}
+
 export const listener = (data) => {
   const [command, path] = data.toString().trim().split(' ');
   switch (command) {
     case 'up': up(path);
+      break;
+    case 'cd': cd(path);
       break;
     default: console.log(`Unknown command: ${command}`);
   }
