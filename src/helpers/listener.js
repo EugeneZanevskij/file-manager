@@ -1,6 +1,6 @@
 import { resolve } from 'path';
 import { getCurrentDirectory } from './console.js';
-import { rename, unlink } from 'fs/promises';
+import { unlink } from 'fs/promises';
 import { createReadStream, createWriteStream } from 'fs';
 import { pipeline } from 'stream/promises';
 
@@ -8,21 +8,7 @@ import { up, cd } from '../operations/navigation.js';
 import { ls } from '../operations/ls.js';
 import { cat } from '../operations/cat.js';
 import { add } from '../operations/add.js';
-
-
-const rn = async (path, newPath) => {
-  try {
-    if (path && newPath) {
-      const currentDir = process.cwd();
-      await rename(resolve(currentDir, path), resolve(currentDir, newPath));
-      getCurrentDirectory();
-    } else {
-      console.log('Invalid input');
-    }
-  } catch {
-    console.log('Operation failed');
-  }
-}
+import { rn } from '../operations/rn.js';
 
 const cp = async (path, newPath) => {
   try {
