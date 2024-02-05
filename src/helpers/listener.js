@@ -1,26 +1,12 @@
-import { resolve, join } from 'path';
+import { resolve } from 'path';
 import { getCurrentDirectory } from './console.js';
 import { open, rename, unlink } from 'fs/promises';
 import { createReadStream, createWriteStream } from 'fs';
 import { pipeline } from 'stream/promises';
-import { output } from './output.js';
 
 import { up, cd } from '../operations/navigation.js';
 import { ls } from '../operations/ls.js';
-
-const cat = async (path) => {
-  try {
-    if (path) {
-      const readStream = createReadStream(resolve(path), {encoding: 'utf-8'});
-      await pipeline(readStream, output());
-      getCurrentDirectory();
-    } else {
-      console.log('Invalid input');
-    }
-  } catch {
-    console.log('Operation failed');
-  }
-}
+import { cat } from '../operations/cat.js';
 
 const add = async (path) => {
   try {
