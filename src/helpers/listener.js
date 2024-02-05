@@ -8,6 +8,7 @@ import { mv } from '../operations/mv.js';
 import { rm } from '../operations/rm.js';
 import { endOfApp } from './console.js';
 import { os } from '../operations/os.js';
+import { hash } from '../operations/hash.js';
 
 export const listener = async (data) => {
   const [command, path, newPath] = data.toString().trim().split(' ');
@@ -31,6 +32,8 @@ export const listener = async (data) => {
     case 'rm': await rm(path);
       break;
     case 'os': os(path);
+      break;
+    case 'hash': await hash(path);
       break;
     case '.exit': endOfApp();
       break;
